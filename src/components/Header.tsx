@@ -10,7 +10,6 @@ import {
 } from "lucide-solid";
 
 import { createSignal } from "solid-js";
-import TanStackQueryHeaderUser from "../integrations/tanstack-query/header-user.tsx";
 
 export default function Header() {
   const [isOpen, setIsOpen] = createSignal(false);
@@ -98,10 +97,6 @@ export default function Header() {
 
           {/* Demo Links End */}
         </nav>
-
-        <div class="p-4 border-t border-gray-700 bg-gray-800 flex flex-col gap-2">
-          <TanStackQueryHeaderUser />
-        </div>
       </aside>
     </>
   );

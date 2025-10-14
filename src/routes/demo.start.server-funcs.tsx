@@ -1,6 +1,7 @@
 import * as fs from "node:fs";
 import { createFileRoute, useRouter } from "@tanstack/solid-router";
 import { createServerFn } from "@tanstack/solid-start";
+import { authMiddleware } from "@/lib/auth/middleware";
 
 const filePath = "count.txt";
 
@@ -17,6 +18,7 @@ const getCount = createServerFn({
 });
 
 const updateCount = createServerFn({ method: "POST" })
+  .middleware([authMiddleware])
   .inputValidator((d: number) => d)
   .handler(async ({ data }) => {
     const count = await readCount();
@@ -34,6 +36,7 @@ function Home() {
 
   return (
     <div class="p-4">
+      <p>You must be logged in to update the count.</p>
       <button
         type="button"
         onClick={() => {

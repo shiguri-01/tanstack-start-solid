@@ -14,6 +14,7 @@
       "biome.jsonc",
       "package.json",
       "tsconfig.json",
+      "drizzle.config.ts",
       "!src/routeTree.gen.ts"
     ]
   },
