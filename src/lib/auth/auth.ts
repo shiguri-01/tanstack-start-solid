@@ -20,3 +20,5 @@ export const auth = betterAuth({
     minPasswordLength: MIN_PASSWORD_LENGTH,
   },
 });
+
+export type Session = typeof auth.$Infer.Session;

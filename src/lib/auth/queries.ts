@@ -3,7 +3,7 @@ import { getUser } from "./server-fn";
 
 export const authQueryOptions = () =>
   queryOptions({
-    queryKey: ["user"],
+    queryKey: ["auth", "user"],
     queryFn: ({ signal }) => getUser({ signal }),
   });
 

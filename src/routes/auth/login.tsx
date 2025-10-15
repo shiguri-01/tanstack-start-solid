@@ -16,8 +16,7 @@ import {
   TextFieldInput,
   TextFieldLabel,
 } from "@/components/ui/text-field";
-import authClient from "@/lib/auth/client";
-import { authQueryOptions } from "@/lib/auth/queries";
+import { authClient } from "@/lib/auth/client";
 import { MIN_PASSWORD_LENGTH } from "@/lib/auth/utils";
 
 export const Route = createFileRoute("/auth/login")({
@@ -34,23 +33,22 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   const login = useMutation(() => ({
-    mutationFn: async (data: { email: string; password: string }) => {
-      await authClient.signIn.email(
-        {
-          ...data,
-        },
-        {
-          onError: ({ error }) => {
-            console.error(error);
-          },
-          onSuccess: () => {
-            queryClient.removeQueries({
-              queryKey: authQueryOptions().queryKey,
-            });
-            navigate({ to: "/my-page" });
-          },
-        },
-      );
+    mutationFn: async (credentials: { email: string; password: string }) => {
+      const { data, error } = await authClient.signIn.email(credentials);
+
+      if (error) throw error;
+      return data;
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+    onSuccess: ({ user }) => {
+      queryClient.invalidateQueries({
+        queryKey: ["auth"],
+      });
+      queryClient.setQueryData(["auth", "user"], user);
+
+      navigate({ to: "/my-page" });
     },
   }));
 
