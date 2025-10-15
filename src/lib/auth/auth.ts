@@ -3,7 +3,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { reactStartCookies } from "better-auth/react-start";
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
-import { MIN_PASSWORD_LENGTH } from "./utils";
+import { MIN_PASSWORD_LENGTH, sendEmail } from "./utils";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -18,6 +18,20 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     minPasswordLength: MIN_PASSWORD_LENGTH,
+  },
+
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url }) => {
+      await sendEmail({
+        data: {
+          to: user.email,
+          subject: "Verify your email address",
+          body: `Click the link to verify your email: ${url}`,
+        },
+      });
+    },
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
   },
 });
 
